@@ -1,6 +1,4 @@
--- Проверка наличия дома в базе данных 
-DROP FUNCTION check_house;
-
+-- 0) Проверка наличия дома в базе данных 
 CREATE OR REPLACE FUNCTION check_house(новый_адрес varchar(200))
 RETURNS BOOLEAN
 LANGUAGE plpgsql
@@ -14,12 +12,7 @@ BEGIN
 END;
 $$;
 
-select * from check_house('ул. Пушкина, д. 15');
-select * from check_house('ул. Бардина, д. 48а');
-
-select * from project.дома;
-
--- 1) Добавление нового дома в базу данных.
+-- 1) Добавление нового дома в базу данных (процедура)
 
 CREATE PROCEDURE project.add_house (
     н_адрес varchar(200),
@@ -37,6 +30,7 @@ $$;
 
 call project.add_house('ул. Бардина 48а', 'Юго-западный', 10, 'элитный');
 select * from project.дома where адрес = 'ул. Бардина 48а';
+
 -- 2) Добавление новой квартиры в базу данных
 
 CREATE OR REPLACE FUNCTION project.add_apartment_with_check(
@@ -63,7 +57,6 @@ $$;
 
 SELECT * 
 FROM project.add_apartment_with_check(1, CAST('ул. Пушкина, д. 15' AS varchar(200)), CAST(500 as float), 6, CAST(7000000 as float), CAST('продажа жилая' as varchar(20)));
-
 SELECT * 
 FROM project.add_apartment_with_check(1, CAST('ул. Птушкина, д. 15' AS varchar(200)), CAST(500 as float), 6, CAST(7000000 as float), CAST('продажа жилая' as varchar(20)));
 
